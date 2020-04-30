@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "samplespace"
+version = "0.1.0"
+description = ""
+authors = ["Coriander V. Pines <1647914-cvpines@users.noreply.gitlab.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.5"
+xxhash = "^1.4"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.4"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
