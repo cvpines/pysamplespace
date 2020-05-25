@@ -1,0 +1,26 @@
+image: "python:3.7"
+
+before_script:
+  - python --version
+  - apt-get update -qy
+  - apt-get install -y python-dev python-pip
+  - pip install -r dev-requirements.txt
+
+stages:
+  - Run Tests
+
+test:
+  stage: Run Tests
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "develop"
+  script:
+    - cd tests; python -m coverage run -m pytest -v . | tee test-results.txt
+    - coverage report | tee coverage.txt
+  artifacts:
+    paths:
+      - tests/coverage.txt
+      - tests/test-results.txt
+  coverage: '/TOTAL\s+\d+\s+\d+\s+(\d+%)/'

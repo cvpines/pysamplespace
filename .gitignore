@@ -1,3 +1,6 @@
+tests/random_output/*.bytes
+private/
+
 ### JetBrains ###
 .idea/
 
@@ -119,3 +122,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+tests/algo_metrics.txt
+tests/rrs_metrics.txt

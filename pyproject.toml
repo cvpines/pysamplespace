@@ -1,16 +1,25 @@
 [tool.poetry]
-name = "samplespace"
-version = "0.1.0"
-description = ""
-authors = ["Coriander V. Pines <1647914-cvpines@users.noreply.gitlab.com>"]
-license = "MIT"
+name = "pysamplespace"
+version = "1.0.0"
+description = "SampleSpace is a cross-platform library for describing and sampling from random distributions."
+authors = ["Coriander V. Pines"]
+license = "BSD-3-Clause"
+readme = "README.md"
+packages = [
+    { include = "samplespace" },
+]
 
 [tool.poetry.dependencies]
-python = "^3.5"
+python = "^3.7"
 xxhash = "^1.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4"
+pyyaml = "^5.3"
+toml = "^0.10.0"
+coverage = "^5.1"
+sphinx = "^3.0"
+sphinx-rtd-theme = "^0.4.3"
 
 [build-system]
 requires = ["poetry>=0.12"]
