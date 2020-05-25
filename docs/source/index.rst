@@ -16,7 +16,7 @@ numbers are required.
 
 Installation is simple::
 
-    $ pip install samplespace
+    $ pip install pysamplespace
 
 SampleSpace's only dependency is
 `xxHash <https://pypi.org/project/xxhash/>`_, though it optionally
