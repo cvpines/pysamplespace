@@ -1,9 +1,9 @@
 [tool.poetry]
 name = "pysamplespace"
-version = "1.0.0"
 packages = [
     { include = "samplespace" },
 ]
+version = "1.0.1"
 description = "SampleSpace is a cross-platform library for describing and sampling from random distributions."
 authors = ["Coriander V. Pines"]
 license = "BSD-3-Clause"
