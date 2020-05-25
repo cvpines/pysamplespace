@@ -31,7 +31,7 @@ and serialized states are compatible across each platform implementation.
 
 Installation is simple using `pip`:
 
-> `$ pip install samplespace`
+> `$ pip install pysamplespace`
 
 SampleSpace's only dependency is
 [xxHash](https://pypi.org/project/xxhash/), though it optionally

@@ -1,12 +1,22 @@
 [tool.poetry]
 name = "pysamplespace"
 version = "1.0.0"
+packages = [
+    { include = "samplespace" },
+]
 description = "SampleSpace is a cross-platform library for describing and sampling from random distributions."
 authors = ["Coriander V. Pines"]
 license = "BSD-3-Clause"
 readme = "README.md"
-packages = [
-    { include = "samplespace" },
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Artistic Software",
+    "Topic :: Games/Entertainment",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing"
 ]
 
 [tool.poetry.dependencies]
