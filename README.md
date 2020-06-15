@@ -170,7 +170,6 @@ for row in buildings:
 `samplespace.algorithms` implements several general-purpose sampling algorithms
 such as binary roulette wheel sampling and alias tables.
 
-
 ### PyYAML Support
 
 SampleSpace provides optional support for [PyYAML](https://pypi.org/project/PyYAML/),
@@ -206,7 +205,6 @@ gamma_as_yaml = yaml.dump(gamma) # '!samplespace.distribution\nalpha: 5.0\nbeta:
 
 dist_from_yaml = yaml.load(gamma_as_yaml, Loader=yaml.FullLoader)
 ```
-
 
 ## Copyright and License 
 

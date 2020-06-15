@@ -219,7 +219,8 @@ class Geometric(Distribution):
     def sample(self, rand) -> int:
         func = getattr(rand,
                        'geometric',
-                       lambda *args: self._impl(rand, *args))
+                       lambda mean, include_zero:
+                       self._impl(rand, mean, include_zero))
         return func(self._mean, self._include_zero)
 
     def as_list(self) -> List:
@@ -275,7 +276,8 @@ class FiniteGeometric(Distribution):
 
     def __init__(self, s: float, n: int):
         super().__init__()
-        assert n >= 1, 'n must be at least 1.'
+        if n < 1:
+            raise ValueError('n must be at least 1.')
         self._s: float = s
         self._n: int = n
         self._cum_weights = list(itertools.accumulate(
@@ -324,7 +326,8 @@ class ZipfMandelbrot(Distribution):
 
     def __init__(self, s: float, q: float, n: int):
         super().__init__()
-        assert n >= 1, 'n must be at least 1.'
+        if n < 1:
+            raise ValueError('n must be at least 1.')
         self._s: float = s
         self._q: float = q
         self._n: int = n
@@ -815,13 +818,16 @@ class WeightedCategorical(Distribution):
         super().__init__()
 
         if items is not None:
-            assert population is None \
-                   and weights is None \
-                   and cum_weights is None, \
-                'Specify either items or population and weight.'
+            if population is not None \
+                    or weights is not None \
+                    or cum_weights is not None:
+                raise ValueError(
+                    'Specify either items or population and weight.')
             population, weights = zip(*items)
         else:
-            assert population is not None, 'Must specify population.'
+            if population is None:
+                raise ValueError(
+                    'Must specify population.')
 
         self._population: Sequence = list(population)
 
@@ -834,12 +840,16 @@ class WeightedCategorical(Distribution):
                 self._cum_weights: Sequence[float] = \
                     list(itertools.accumulate(weights))
         else:
-            assert weights is None, \
-                'Cannot specify both  weights and cumulative weights.'
+            if weights is not None:
+                raise ValueError(
+                    'Cannot specify both weights '
+                    'and cumulative weights.')
             self._cum_weights = list(cum_weights)
 
-        assert len(self._cum_weights) == len(self._population), \
-            'Population and weights must have the same number of elements.'
+        if len(self._cum_weights) != len(self._population):
+            raise ValueError(
+                'Population and weights must have '
+                'the same number of elements.')
 
     @property
     def population(self) -> Sequence:

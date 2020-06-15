@@ -1009,7 +1009,7 @@ class RepeatableRandomSequence(object):
         # Implementation based on MSVC standard library.
         # Supports limits greater than _BLOCK_SIZE_BITS bits long
         with self.cascade():
-            for i in range(self._MAX_ITERATIONS):
+            for _ in range(self._MAX_ITERATIONS):
                 result = 0
                 mask = 0
                 while mask < limit - 1:
@@ -1023,8 +1023,8 @@ class RepeatableRandomSequence(object):
                 if (result // limit < mask // limit) or \
                         (mask % limit == limit - 1):
                     return result % limit
-            else:
-                raise RuntimeError('Could not make a random '
+
+            raise RuntimeError('Could not make a random '
                                    'selection within limit.')
 
     def _gauss_impl(self) -> Tuple[float, float]:

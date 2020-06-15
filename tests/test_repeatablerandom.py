@@ -126,7 +126,9 @@ def test_cascade_indices():
     # Non-cascaded should use subsequent indices
     rrs.index_list.clear()
     start_index = rrs.index
-    [rrs.getnextblock() for _ in range(10)]
+    for _ in range(10):
+        rrs.getnextblock()
+
     assert rrs.index_list == [start_index + i for i in range(10)]
 
     # Cascades should produce the same number of indices, but
@@ -134,7 +136,9 @@ def test_cascade_indices():
     rrs.index_list.clear()
     start_index = rrs.index
     with rrs.cascade():
-        [rrs.getnextblock() for _ in range(10)]
+        for _ in range(10):
+            rrs.getnextblock()
+
     assert len(rrs.index_list) == 10
     assert rrs.index_list[0] == start_index
     assert rrs.index_list[1:] != [start_index + i for i in range(1, 10)]
@@ -205,12 +209,14 @@ def test_distinct_seeds():
 def test_state():
     # Restoring state
     rrs = samplespace.RepeatableRandomSequence(seed=12345)
-    [rrs.getnextblock() for _ in range(100)]
+    for _ in range(100):
+        rrs.getnextblock()
 
     state = rrs.getstate()
     expected = rrs.getnextblock()
 
-    [rrs.getnextblock() for _ in range(100)]
+    for _ in range(100):
+        rrs.getnextblock()
 
     rrs.setstate(state)
     actual = rrs.getnextblock()
@@ -220,7 +226,8 @@ def test_state():
     start_index = rrs.index
     expected = rrs.getnextblock()
 
-    [rrs.getnextblock() for _ in range(100)]
+    for _ in range(100):
+        rrs.getnextblock()
 
     rrs.index = start_index
     actual = rrs.getnextblock()
@@ -229,7 +236,8 @@ def test_state():
     # Rewinding indices
     expected = [rrs.random() for _ in range(10)]
 
-    [rrs.getnextblock() for _ in range(50)]
+    for _ in range(50):
+        rrs.getnextblock()
 
     rrs.index -= 60
     actual = [rrs.random() for _ in range(10)]
