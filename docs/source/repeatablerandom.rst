@@ -7,8 +7,8 @@
 ----------
 
 :class:`RepeatableRandomSequence` allows for generating repeatable,
-deterministic random sequences. It is compatible :mod:`random` as a
-drop-in replacement.
+deterministic random sequences. It is compatible with the built-in
+:mod:`random` module as a drop-in replacement.
 
 A key feature of :class:`RepeatableRandomSequence` is its ability to
 get, serialize, and restore internal state. This is especially useful
