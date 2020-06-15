@@ -52,7 +52,9 @@ SampleSpace provides the following submodules:
 ### Repeatable Random Sequences
 
 `samplespace.repeatablerandom` allows for generating repeatable, 
-deterministic random sequences. It is compatible random as a drop-in replacement.
+deterministic random sequences. It is compatible with the built-in
+[random](https://docs.python.org/3/library/random.html) module as a
+drop-in replacement.
 
 A key feature of `RepeatableRandomSequence` is its ability to get, serialize, and restore internal
 state. This is especially useful when generating procedural content from a fixed seed.

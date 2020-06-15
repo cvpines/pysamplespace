@@ -8,6 +8,6 @@ Submodules:
     pyyaml_support - YAML serialization support
 """
 
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 
 from .repeatablerandom import RepeatableRandomSequence
