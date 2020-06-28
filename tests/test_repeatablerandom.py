@@ -327,6 +327,13 @@ def test_triangular_args():
     assert rrs.triangular(2.0, 2.0, 2.0) == 2.0
 
 
+def test_uniformproduct_args():
+    rrs = samplespace.RepeatableRandomSequence()
+
+    with pytest.raises(ValueError):
+        rrs.uniformproduct(0)
+
+
 def test_geometric_args():
     rrs = samplespace.RepeatableRandomSequence()
 

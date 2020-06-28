@@ -18,6 +18,7 @@ dist_args = [
     ('gamma', {'alpha': 3.4, 'beta': 4.5}),
     ('triangular', {'low': 2.4, 'high': 4.6, 'mode': 3.5}),
     ('triangular', {'low': 2.4, 'high': 4.6}),
+    ('uniformproduct', {'n': 4}),
     ('lognormal', {'mu': -1.3, 'sigma': 3.1}),
     ('exponential', {'lambd': 2.3}),
     ('vonmises', {'mu': 3.4, 'kappa': 23.1}),
@@ -131,6 +132,41 @@ def test_geometric_impl():
             expected = rrs.geometric(mean)
             rrs.setstate(state)
             actual = dist._impl(rrs, mean, False)
+            assert actual == expected
+
+
+def test_uniformproduct_dynamic_impl():
+    # noinspection PyUnusedLocal
+    def override_impl(*args):
+        return 'CALLED_IMPL'
+
+    dist = distributions.UniformProduct(5)
+    dist._impl = override_impl
+
+    # random module doesn't supply uniformproduct(), so the replaced
+    # impl method should be called.
+    assert dist.sample(random) == 'CALLED_IMPL'
+
+    # RRS does supply uniformproduct(), so the replaced impl method
+    # should not be called.
+    rrs = RepeatableRandomSequence(seed=2)
+    assert dist.sample(rrs) != 'CALLED_IMPL'
+
+
+# noinspection PyProtectedMember
+def test_uniformproduct_impl():
+    with pytest.raises(ValueError):
+        distributions.UniformProduct(-1).sample(random)
+
+    rrs = RepeatableRandomSequence(seed=1234)
+    for n in (1, 2, 5, 10):
+        dist = distributions.UniformProduct(n)
+        for _ in range(10):
+            state = rrs.getstate()
+            expected = rrs.uniformproduct(n)
+            rrs.setstate(state)
+            with rrs.cascade():
+                actual = dist._impl(rrs, n)
             assert actual == expected
 
 

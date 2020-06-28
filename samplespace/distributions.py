@@ -15,6 +15,7 @@ __all__ = [
     'ZipfMandelbrot',
     'Gamma',
     'Triangular',
+    'UniformProduct',
     'LogNormal',
     'Exponential',
     'VonMises',
@@ -481,6 +482,59 @@ class Triangular(Distribution):
         }
         if self._mode is not None:
             result['mode'] = self._mode
+        return result
+
+
+class UniformProduct(Distribution):
+    r"""Represents a distribution whose values are the product of N
+    uniformly distributed variables.
+
+    This distribution has the following PDF
+
+    .. math::
+
+        \text{P}(x) =
+        \begin{cases}
+        \frac{(-1)^{n-1} log^{n-1}(x)}{(n - 1)!} &
+        \text{for } x \in [0, 1) \\
+        0 & \text{otherwise}
+        \end{cases}
+    """
+
+    def __init__(self, n: int):
+        super().__init__()
+        if n < 1:
+            raise ValueError('n must be at least 1.')
+        self._n: int = n
+
+    @property
+    def n(self) -> int:
+        """Read-only property for the number of uniformly distributed
+        variables to multiply."""
+        return self._n
+
+    def sample(self, rand) -> float:
+        func = getattr(rand,
+                       'uniformproduct',
+                       lambda n:
+                       self._impl(rand, n))
+        return func(self._n)
+
+    def as_list(self) -> List:
+        return [self.__class__.__name__.casefold(),
+                self._n]
+
+    def as_dict(self) -> Dict:
+        return {
+            'distribution': self.__class__.__name__.casefold(),
+            'n': self._n
+        }
+
+    @staticmethod
+    def _impl(rand, n: int) -> float:
+        result: float = 1.0
+        for _ in range(n):
+            result *= rand.random()
         return result
 
 

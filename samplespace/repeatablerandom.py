@@ -723,6 +723,32 @@ class RepeatableRandomSequence(object):
             low, high = high, low
         return low + (high - low) * sqrt(u * c)
 
+    def uniformproduct(self, n: int) -> float:
+        r"""Sample from a distribution whose values are the product of N
+        uniformly distributed variables.
+
+        This distribution has the following PDF
+
+        .. math::
+
+            \text{P}(x) =
+            \begin{cases}
+            \frac{(-1)^{n-1} log^{n-1}(x)}{(n - 1)!} &
+            \text{for } x \in [0, 1) \\
+            0 & \text{otherwise}
+            \end{cases}
+
+        Raises:
+            ValueError: if `n` is not at least 1.
+        """
+        if n < 1:
+            raise ValueError('n must be at least 1.')
+        result: float = 1.0
+        with self.cascade():
+            for _ in range(n):
+                result *= self.random()
+        return result
+
     def chance(self, p: float) -> bool:
         """Returns ``True`` with probability `p`, else ``False``.
 

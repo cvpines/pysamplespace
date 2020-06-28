@@ -81,6 +81,10 @@ Continuous distributions
     :members:
     :inherited-members:
 
+.. autoclass:: UniformProduct
+    :members:
+    :inherited-members:
+
 .. autoclass:: LogNormal
     :members:
     :inherited-members:

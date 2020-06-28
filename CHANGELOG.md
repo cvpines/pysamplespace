@@ -14,7 +14,9 @@ v1.0.2
 * Fixed documentation typo
 * Improved PyPI info
 
-XXXXXX
+v1.0.3
 ------
 * Markdown cleanup
 * Minor code cleanup
+* Updated dependency versions
+* Added uniform product distribution
