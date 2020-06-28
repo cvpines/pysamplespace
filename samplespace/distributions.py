@@ -441,6 +441,7 @@ class Triangular(Distribution):
                  low: float = 0.0,
                  high: float = 1.0,
                  mode: Optional[float] = None):
+        super().__init__()
         self._low = low
         self._high = high
         self._mode = mode
@@ -498,6 +499,7 @@ class LogNormal(Distribution):
     """
 
     def __init__(self, mu: float = 0.0, sigma: float = 1.0):
+        super().__init__()
         self._mu = mu
         self._sigma = sigma
 
@@ -534,6 +536,7 @@ class Exponential(Distribution):
     :math:`\text{P}(x)= \lambda e^{-\lambda x}` where :math:`x\ge 0`"""
 
     def __init__(self, lambd: float):
+        super().__init__()
         self._lambda = lambd
 
     @property
@@ -573,6 +576,7 @@ class VonMises(Distribution):
     """
 
     def __init__(self, mu: float, kappa: float):
+        super().__init__()
         self._mu = mu
         self._kappa = kappa
 
@@ -614,6 +618,7 @@ class Beta(Distribution):
     """
 
     def __init__(self, alpha: float, beta: float):
+        super().__init__()
         self._alpha = alpha
         self._beta = beta
 
@@ -654,6 +659,7 @@ class Pareto(Distribution):
     """
 
     def __init__(self, alpha: float):
+        super().__init__()
         self._alpha = alpha
 
     @property
@@ -691,6 +697,7 @@ class Weibull(Distribution):
     """
 
     def __init__(self, alpha: float, beta: float):
+        super().__init__()
         self._alpha = alpha
         self._beta = beta
 
