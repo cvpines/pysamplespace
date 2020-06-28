@@ -15,6 +15,7 @@ __all__ = [
     'ZipfMandelbrot',
     'Gamma',
     'Triangular',
+    'UniformProduct',
     'LogNormal',
     'Exponential',
     'VonMises',
@@ -219,7 +220,8 @@ class Geometric(Distribution):
     def sample(self, rand) -> int:
         func = getattr(rand,
                        'geometric',
-                       lambda *args: self._impl(rand, *args))
+                       lambda mean, include_zero:
+                       self._impl(rand, mean, include_zero))
         return func(self._mean, self._include_zero)
 
     def as_list(self) -> List:
@@ -275,7 +277,8 @@ class FiniteGeometric(Distribution):
 
     def __init__(self, s: float, n: int):
         super().__init__()
-        assert n >= 1, 'n must be at least 1.'
+        if n < 1:
+            raise ValueError('n must be at least 1.')
         self._s: float = s
         self._n: int = n
         self._cum_weights = list(itertools.accumulate(
@@ -324,7 +327,8 @@ class ZipfMandelbrot(Distribution):
 
     def __init__(self, s: float, q: float, n: int):
         super().__init__()
-        assert n >= 1, 'n must be at least 1.'
+        if n < 1:
+            raise ValueError('n must be at least 1.')
         self._s: float = s
         self._q: float = q
         self._n: int = n
@@ -438,6 +442,7 @@ class Triangular(Distribution):
                  low: float = 0.0,
                  high: float = 1.0,
                  mode: Optional[float] = None):
+        super().__init__()
         self._low = low
         self._high = high
         self._mode = mode
@@ -480,6 +485,59 @@ class Triangular(Distribution):
         return result
 
 
+class UniformProduct(Distribution):
+    r"""Represents a distribution whose values are the product of N
+    uniformly distributed variables.
+
+    This distribution has the following PDF
+
+    .. math::
+
+        \text{P}(x) =
+        \begin{cases}
+        \frac{(-1)^{n-1} log^{n-1}(x)}{(n - 1)!} &
+        \text{for } x \in [0, 1) \\
+        0 & \text{otherwise}
+        \end{cases}
+    """
+
+    def __init__(self, n: int):
+        super().__init__()
+        if n < 1:
+            raise ValueError('n must be at least 1.')
+        self._n: int = n
+
+    @property
+    def n(self) -> int:
+        """Read-only property for the number of uniformly distributed
+        variables to multiply."""
+        return self._n
+
+    def sample(self, rand) -> float:
+        func = getattr(rand,
+                       'uniformproduct',
+                       lambda n:
+                       self._impl(rand, n))
+        return func(self._n)
+
+    def as_list(self) -> List:
+        return [self.__class__.__name__.casefold(),
+                self._n]
+
+    def as_dict(self) -> Dict:
+        return {
+            'distribution': self.__class__.__name__.casefold(),
+            'n': self._n
+        }
+
+    @staticmethod
+    def _impl(rand, n: int) -> float:
+        result: float = 1.0
+        for _ in range(n):
+            result *= rand.random()
+        return result
+
+
 class LogNormal(Distribution):
     r"""Represents a log-normal distribution with parameters
     `mu` and `sigma`.
@@ -495,6 +553,7 @@ class LogNormal(Distribution):
     """
 
     def __init__(self, mu: float = 0.0, sigma: float = 1.0):
+        super().__init__()
         self._mu = mu
         self._sigma = sigma
 
@@ -531,6 +590,7 @@ class Exponential(Distribution):
     :math:`\text{P}(x)= \lambda e^{-\lambda x}` where :math:`x\ge 0`"""
 
     def __init__(self, lambd: float):
+        super().__init__()
         self._lambda = lambd
 
     @property
@@ -570,6 +630,7 @@ class VonMises(Distribution):
     """
 
     def __init__(self, mu: float, kappa: float):
+        super().__init__()
         self._mu = mu
         self._kappa = kappa
 
@@ -611,6 +672,7 @@ class Beta(Distribution):
     """
 
     def __init__(self, alpha: float, beta: float):
+        super().__init__()
         self._alpha = alpha
         self._beta = beta
 
@@ -651,6 +713,7 @@ class Pareto(Distribution):
     """
 
     def __init__(self, alpha: float):
+        super().__init__()
         self._alpha = alpha
 
     @property
@@ -688,6 +751,7 @@ class Weibull(Distribution):
     """
 
     def __init__(self, alpha: float, beta: float):
+        super().__init__()
         self._alpha = alpha
         self._beta = beta
 
@@ -815,13 +879,16 @@ class WeightedCategorical(Distribution):
         super().__init__()
 
         if items is not None:
-            assert population is None \
-                   and weights is None \
-                   and cum_weights is None, \
-                'Specify either items or population and weight.'
+            if population is not None \
+                    or weights is not None \
+                    or cum_weights is not None:
+                raise ValueError(
+                    'Specify either items or population and weight.')
             population, weights = zip(*items)
         else:
-            assert population is not None, 'Must specify population.'
+            if population is None:
+                raise ValueError(
+                    'Must specify population.')
 
         self._population: Sequence = list(population)
 
@@ -834,12 +901,16 @@ class WeightedCategorical(Distribution):
                 self._cum_weights: Sequence[float] = \
                     list(itertools.accumulate(weights))
         else:
-            assert weights is None, \
-                'Cannot specify both  weights and cumulative weights.'
+            if weights is not None:
+                raise ValueError(
+                    'Cannot specify both weights '
+                    'and cumulative weights.')
             self._cum_weights = list(cum_weights)
 
-        assert len(self._cum_weights) == len(self._population), \
-            'Population and weights must have the same number of elements.'
+        if len(self._cum_weights) != len(self._population):
+            raise ValueError(
+                'Population and weights must have '
+                'the same number of elements.')
 
     @property
     def population(self) -> Sequence:

@@ -1,4 +1,3 @@
-import random
 from itertools import accumulate
 
 from samplespace import algorithms

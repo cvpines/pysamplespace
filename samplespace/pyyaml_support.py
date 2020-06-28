@@ -69,7 +69,7 @@ def _add_distributions_support():
     distributions.Distribution.yaml_tag = u'!samplespace.distribution'
 
     # noinspection PyProtectedMember
-    for name, cls in distributions._distribution_lookup.items():
+    for cls in distributions._distribution_lookup.values():
         yaml.add_representer(cls, _make_distribution_representer(cls))
         yaml.add_constructor(cls.yaml_tag, _make_distribution_constructor())
 

@@ -91,6 +91,8 @@ Continuous distributions
 
 .. automethod:: RepeatableRandomSequence.triangular
 
+.. automethod:: RepeatableRandomSequence.uniformproduct
+
 .. automethod:: RepeatableRandomSequence.gauss
 
 .. automethod:: RepeatableRandomSequence.gausspair
