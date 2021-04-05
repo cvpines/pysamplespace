@@ -3,7 +3,7 @@ name = "pysamplespace"
 packages = [
     { include = "samplespace" },
 ]
-version = "1.0.3"
+version = "1.0.4"
 description = "SampleSpace is a cross-platform library for describing and sampling from random distributions."
 authors = ["Coriander V. Pines <contact@corianderpines.org>"]
 license = "BSD-3-Clause"
